@@ -1,15 +1,13 @@
-export interface ResizeEvent {
-    type: "resize"
-    width: number
-    height: number
+export interface GetGraphEvent {
+    type: "getGraph"
 }
 
-export interface InitEvent {
-    type: "init"
-    canvas: OffscreenCanvas
-    maxFps: number
+export interface ReturnGraphEvent {
+    type: "returnGraph"
+    graph: any
 }
 
 
 
-export type WorkerEvent = ResizeEvent | InitEvent
+export type WorkerGetEvent = GetGraphEvent
+export type WorkerReturnEvent = ReturnGraphEvent

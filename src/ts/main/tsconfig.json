@@ -1,6 +1,7 @@
 {
   "extends": "../generic-tsconfig.json",
   "compilerOptions": {
+    "module": "esnext",
     "lib": ["esnext", "dom"],
     "types": [ "offscreencanvas"]
   },

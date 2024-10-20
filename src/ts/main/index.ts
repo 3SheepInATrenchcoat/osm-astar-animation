@@ -1,5 +1,9 @@
-import {InitEvent, ResizeEvent} from "../common/models/WorkerEvent";
-
+import {GetGraphEvent, WorkerReturnEvent} from "../common/models/WorkerEvent";
+import Sigma from "sigma";
+import Graph from "graphology";
+import {GraphEdge, GraphNode} from "../common/models/GraphTypes";
+import {NodeDisplayData} from "sigma/types";
+import {NoNodeProgram} from "./Programs/NoNode/NoNodeProgram";
 
 export function app() {
     console.log("TypeScript works");
@@ -7,40 +11,53 @@ export function app() {
 
     startDraw()
 
-
-
 }
 
 
+let sigma: Sigma<GraphNode, GraphEdge> | null = null;
+
 function startDraw() {
-    let canvas = document.getElementById("mainCanvas") as HTMLCanvasElement | null;
+    let canvas = document.getElementById("sigmaContainer") as HTMLElement | null;
     if (canvas == null)
         return
 
-    let offscreenCanvas = canvas.transferControlToOffscreen()
 
     const worker = new Worker(new URL('../canvas_worker/worker.ts', import.meta.url))
-    window.addEventListener("resize", (event) => {
-        let canvas = document.getElementById("mainCanvas") as HTMLCanvasElement | null;
+    worker.onmessage = (e: MessageEvent<WorkerReturnEvent>) => {
+        const data = e.data;
 
-        if (canvas == null)
-            return
+        if (data.type == "returnGraph") {
+            let graph = new Graph<GraphNode, GraphEdge>()
+            graph = graph.import(data.graph)
 
-        const resizeEvent: ResizeEvent = {
-            type: "resize",
-            width: window.innerWidth,
-            height: window.innerHeight
+            console.log(graph)
+
+            sigma = new Sigma<GraphNode, GraphEdge>(graph, canvas, {
+                nodeReducer: (node, data) => {
+                    let ret: Partial<NodeDisplayData> = {
+                        ...data,
+                        size: 0,
+                        type: "circle"
+                    };
+
+                    return ret
+                },
+                edgeReducer: (edge, data) => {
+                    return {
+                        ...data
+                    }
+                },
+                nodeProgramClasses: {
+                    // noNode: NoNodeProgram
+                }
+            })
         }
 
-        worker.postMessage(resizeEvent);
-    })
-
-
-    const drawEvent: InitEvent = {
-        type: "init",
-        canvas: offscreenCanvas,
-        maxFps: 0
     }
 
-    worker.postMessage(drawEvent, [offscreenCanvas]);
+    const drawEvent: GetGraphEvent = {
+        type: "getGraph"
+    }
+
+    worker.postMessage(drawEvent);
 }

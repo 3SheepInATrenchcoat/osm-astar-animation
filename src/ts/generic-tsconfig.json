@@ -11,9 +11,11 @@
     "allowJs": true,
 
     "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true
   },
   "include": [
-    "common"
+    "common",
+    "common/**/*.json"
   ]
 }

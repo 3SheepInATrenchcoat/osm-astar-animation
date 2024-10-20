@@ -1,24 +1,25 @@
-import {WorkerEvent} from "../common/models/WorkerEvent";
-import {maxFpsWrapper} from "./AnimationWrapper";
-import {MultiGraph} from "graphology";
-import {OSMEdge, OSMEdgeId, OSMNode, OSMType} from "../common/models/OSMTypes";
+import {ReturnGraphEvent, WorkerGetEvent} from "../common/models/WorkerEvent";
+import {UndirectedGraph} from "graphology";
+import {OSMEdgeId, OSMType} from "../common/models/OSMTypes";
 
-import data from "../common/data/example.json"
-
-
-class DrawWorker {
-    canvas: OffscreenCanvas
-    private graph: MultiGraph<OSMNode, OSMEdge>
+// import exampleOSMData from "../common/data/example.json"
+import exampleOSMData from "../common/data/apeldoorn.json"
+import {GraphEdge, GraphNode} from "../common/models/GraphTypes";
 
 
-    constructor(canvas: OffscreenCanvas, maxFps: number) {
-        this.canvas = canvas
-        this.graph = new MultiGraph<OSMNode, OSMEdge>()
+onmessage = (message: MessageEvent<WorkerGetEvent>) => {
+    const data = message.data
+    console.log(data)
 
+    if (data.type == "getGraph") {
+        let graph = new UndirectedGraph<GraphNode, GraphEdge>()
 
-        data.elements.forEach((element: OSMType) => {
+        exampleOSMData.elements.forEach((element: OSMType) => {
             if (element.type === "node") {
-                this.graph.addNode(element.id, element)
+                graph.addNode(element.id, {
+                    x: element.lon,
+                    y: element.lat
+                })
             }
 
             if (element.type === "way") {
@@ -27,7 +28,10 @@ class DrawWorker {
                     .map((id: OSMEdgeId, index: number) => [id, element.nodes[index + 1]])
                     .forEach(([start, end]) => {
                         try {
-                            this.graph.addEdge(start, end, element)
+                            if (graph.areNeighbors(start, end)) {
+                                return
+                            }
+                            graph.addEdge(start, end, {})
                         } catch (e) {
                             console.error(e)
                         }
@@ -36,43 +40,11 @@ class DrawWorker {
             }
         })
 
-
-        requestAnimationFrame(maxFpsWrapper(this.runAnimation.bind(this), maxFps))
-    }
-
-
-    resize(width: number, height: number) {
-        if (this.canvas == null) {
-            return
+        const ret: ReturnGraphEvent = {
+            type: "returnGraph",
+            graph: graph.export()
         }
 
-        this.canvas.height = height
-        this.canvas.width = width
-    }
-
-
-    runAnimation(deltaTime: number) {
-        let context = this.canvas.getContext("2d")
-
-
-
-
-        // console.log(deltaTime)
-    }
-
-}
-
-
-let worker: DrawWorker | null = null
-
-onmessage = (message: MessageEvent<WorkerEvent>) => {
-    const data = message.data
-    console.log(data)
-
-    if (data.type == "init") {
-        worker = new DrawWorker(data.canvas, data.maxFps)
-    }
-    if (data.type == "resize") {
-        worker?.resize(data.width, data.height)
+        postMessage(ret)
     }
 }
