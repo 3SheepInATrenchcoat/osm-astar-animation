@@ -1,0 +1,10 @@
+{
+  "extends": "../generic-tsconfig.json",
+  "compilerOptions": {
+    "lib": ["esnext", "dom"],
+    "types": [ "offscreencanvas"]
+  },
+  "references": [
+    {"path": "../canvas_worker"}
+  ]
+}

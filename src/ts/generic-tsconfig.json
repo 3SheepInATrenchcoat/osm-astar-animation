@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "module": "esnext",
+    "rootDir": ".",
+    "outDir": "../../dist",
+    "target": "esnext",
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "composite": true,
+    "allowJs": true,
+
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": [
+    "common"
+  ]
+}
