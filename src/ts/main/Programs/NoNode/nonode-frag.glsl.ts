@@ -19,13 +19,7 @@ void main(void) {
   else
     gl_FragColor = transparent;
   #else
-  // For normal mode, we use the color:
-  if (distToCenter > radius)
-    gl_FragColor = transparent;
-  else if (distToCenter > radius - v_border)
-    gl_FragColor = mix(transparent, v_color, (radius - distToCenter) / v_border);
-  else
-    gl_FragColor = mix(v_color, white, (radius - distToCenter) / radius);
+  gl_FragColor = transparent;
   #endif
 }
 `;
