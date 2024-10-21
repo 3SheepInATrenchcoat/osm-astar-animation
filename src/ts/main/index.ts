@@ -6,11 +6,7 @@ import {NodeDisplayData} from "sigma/types";
 import {NoNodeProgram} from "./Programs/NoNode/NoNodeProgram";
 
 export function app() {
-    console.log("TypeScript works");
-
-
     startDraw()
-
 }
 
 
@@ -27,18 +23,17 @@ function startDraw() {
         const data = e.data;
 
         if (data.type == "returnGraph") {
-            let graph = new Graph<GraphNode, GraphEdge>()
-            graph = graph.import(data.graph)
 
-            console.log(graph)
+            let fullGraph = new Graph<GraphNode, GraphEdge>()
+            fullGraph = fullGraph.import(data.graph)
 
-            sigma = new Sigma<GraphNode, GraphEdge>(graph, canvas, {
+            sigma = new Sigma<GraphNode, GraphEdge>(fullGraph, canvas, {
                 nodeReducer: (node, data) => {
                     let ret: Partial<NodeDisplayData> = {
                         ...data,
                         size: 0,
                         color: "red",
-                        type: "circle"
+                        type: "noNode"
                     };
 
                     return ret
@@ -51,7 +46,8 @@ function startDraw() {
                 },
                 nodeProgramClasses: {
                     noNode: NoNodeProgram<GraphNode, GraphEdge>
-                }
+                },
+
             })
 
             sigma.on("enterNode", (event) => {

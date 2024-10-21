@@ -2,7 +2,7 @@
   "extends": "../generic-tsconfig.json",
   "compilerOptions": {
     "module": "esnext",
-    "lib": ["esnext", "dom"],
+    "lib": ["esnext", "dom", "dom.iterable"],
     "types": [ "offscreencanvas"]
   },
   "references": [
