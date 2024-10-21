@@ -2,8 +2,8 @@ import {ReturnGraphEvent, WorkerGetEvent} from "../common/models/WorkerEvent";
 import {UndirectedGraph} from "graphology";
 import {OSMEdgeId, OSMType} from "../common/models/OSMTypes";
 
-// import exampleOSMData from "../common/data/example.json"
-import exampleOSMData from "../common/data/apeldoorn.json"
+import exampleOSMData from "../common/data/example.json"
+// import exampleOSMData from "../common/data/apeldoorn.json"
 import {GraphEdge, GraphNode} from "../common/models/GraphTypes";
 
 

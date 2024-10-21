@@ -37,6 +37,7 @@ function startDraw() {
                     let ret: Partial<NodeDisplayData> = {
                         ...data,
                         size: 0,
+                        color: "red",
                         type: "circle"
                     };
 
@@ -44,13 +45,19 @@ function startDraw() {
                 },
                 edgeReducer: (edge, data) => {
                     return {
-                        ...data
+                        ...data,
+                        size: 1
                     }
                 },
                 nodeProgramClasses: {
-                    // noNode: NoNodeProgram
+                    noNode: NoNodeProgram<GraphNode, GraphEdge>
                 }
             })
+
+            sigma.on("enterNode", (event) => {
+                console.log("enterNode", event);
+            })
+
         }
 
     }
