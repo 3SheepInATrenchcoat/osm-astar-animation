@@ -1,11 +1,32 @@
 {
-  "extends": "../generic-tsconfig.json",
   "compilerOptions": {
+    "strict": true,
     "module": "esnext",
+    "rootDir": ".",
+    "outDir": "../../../dist",
+    "target": "esnext",
+
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+
+    "moduleResolution": "node",
+    "allowJs": true,
+
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+
     "lib": ["esnext", "dom", "dom.iterable"],
     "types": [ "offscreencanvas"]
   },
   "references": [
-    {"path": "../canvas_worker"}
-  ]
+    {
+      "path": "../canvas_worker"
+    },
+    {
+      "path": "../common"
+    }
+  ],
+
 }

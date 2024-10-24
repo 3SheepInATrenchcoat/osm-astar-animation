@@ -20,4 +20,17 @@ export interface OSMEdge {
     }
 }
 
+export interface OSM {
+    version: number,
+    generator: string,
+    "osm3s": {
+        "timestamp_osm_base": string,
+        "timestamp_areas_base": string,
+        "copyright": string
+    },
+    "elements": OSMType[]
+}
+
+
+
 export type OSMType = OSMNode | OSMEdge

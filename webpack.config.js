@@ -23,6 +23,7 @@ module.exports = {
     historyApiFallback: true,
     watchFiles: ["src/**/*"]
   },
+  devtool: "source-map",
   module: {
     rules: [
       {
@@ -35,6 +36,7 @@ module.exports = {
         loader: 'ts-loader',
         options: {
           configFile: path.resolve(__dirname, "src/ts/main/tsconfig.json"),
+          projectReferences: true
         }
       },
     ],

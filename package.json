@@ -45,6 +45,7 @@
     "graphology": "^0.25.4",
     "graphology-utils": "^2.5.2",
     "mnemonist": "^0.39.8",
+    "rxjs": "^7.8.1",
     "sigma": "^3.0.0-beta.33"
   }
 }
